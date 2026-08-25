@@ -8,6 +8,6 @@ for i = 1, 10 do
 
     hl.bind(
         "SUPER + SHIFT + " .. key,
-        hl.dsp.window.move_to_workspace({ workspace = i })
+        hl.dsp.window.move({ workspace = i })
     )
 end

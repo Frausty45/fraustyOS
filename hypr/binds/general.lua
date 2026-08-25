@@ -8,7 +8,7 @@ hl.bind("SUPER + C",
     hl.dsp.window.close()
 )
 
-hl.bind("Alt + F4",
+hl.bind("ALT_L + F4",
     hl.dsp.window.kill()
 )
 

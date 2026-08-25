@@ -1,4 +1,4 @@
 hl.env("XCURSOR_SIZE", "24")
 hl.env("HYPRCURSOR_SIZE", "24")
 
-hl.env("QT_QPA_PLATFORM")
+hl.env("QT_QPA_PLATFORM", "wayland;xcb")

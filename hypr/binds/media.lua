@@ -1,13 +1,13 @@
 hl.bind(
     "XF86AudioRaiseVolume",
-    hl.dsp.exec_cmd("wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+"),
-    { repeating = true }
+    hl.dsp.exec_cmd("wpctl set-volume -l 1 @DEFAULT_AUDIO_SINK@ 5%+"),
+    { repeating = true, locked = true}
 )
 
 hl.bind(
     "XF86AudioLowerVolume",
     hl.dsp.exec_cmd("wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-"),
-    { repeating = true }
+    { repeating = true, locked = true}
 )
 
 hl.bind(

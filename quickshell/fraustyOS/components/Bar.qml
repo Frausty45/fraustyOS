@@ -20,6 +20,7 @@ PanelWindow {
         color: Appearance.background
 
         Text {
+            id: brand
             anchors.centerIn: parent
 
             text: "fraustyOS"
@@ -27,6 +28,22 @@ PanelWindow {
 
             font.pixelSize: Appearance.fontSize
             font.weight: Font.Bold
+        }
+
+        Battery {
+            anchors {
+                right: brand.left
+                verticalCenter: parent.verticalCenter
+                rightMargin: 14
+            }
+        }
+
+        Network {
+            anchors {
+                left: brand.right
+                verticalCenter: parent.verticalCenter
+                leftMargin: 14
+            }
         }
 
         Clock {

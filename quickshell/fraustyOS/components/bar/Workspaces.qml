@@ -1,6 +1,7 @@
 import Quickshell
 import Quickshell.Hyprland
 import QtQuick
+import "../../config"
 
 Item {
     id: root
@@ -37,24 +38,24 @@ Item {
                     text: index.toString()
 
                     color: parent.focused
-                        ? "#89b4fa"
-                        : "#cdd6f4"
+                        ? Appearance.accent
+                        : Appearance.foreground
 
-                    font.pixelSize: 13
+                    font.pixelSize: Appearance.workspaceFontSize
                     font.weight: Font.Bold
 
                     scale: parent.focused ? 1.25 : 1.0
 
                     Behavior on scale {
                         NumberAnimation {
-                            duration: 100
+                            duration: Appearance.animationFast
                             easing.type: Easing.OutCubic
                         }
                     }
 
                     Behavior on color {
                         ColorAnimation {
-                            duration: 100
+                            duration: Appearance.animationFast
                             easing.type: Easing.OutCubic
                         }
                     }

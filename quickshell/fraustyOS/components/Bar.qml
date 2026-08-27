@@ -1,6 +1,7 @@
 import Quickshell
 import QtQuick
 import "bar"
+import "../config"
 
 PanelWindow {
     id: root
@@ -11,20 +12,20 @@ PanelWindow {
         right: true
     }
 
-    implicitHeight: 38
-    exclusiveZone: 38
+    implicitHeight: Appearance.barHeight
+    exclusiveZone: Appearance.barHeight
 
     Rectangle {
         anchors.fill: parent
-        color: "#181825"
+        color: Appearance.background
 
         Text {
             anchors.centerIn: parent
 
             text: "fraustyOS"
-            color: "#cdd6f4"
+            color: Appearance.foreground
 
-            font.pixelSize: 15
+            font.pixelSize: Appearance.fontSize
             font.weight: Font.Bold
         }
 
@@ -32,7 +33,7 @@ PanelWindow {
             anchors {
                 right: parent.right
                 verticalCenter: parent.verticalCenter
-                rightMargin: 14
+                rightMargin: Appearance.barMargin
             }
         }
 
@@ -40,7 +41,7 @@ PanelWindow {
             anchors {
                 left: parent.left
                 verticalCenter: parent.verticalCenter
-                leftMargin: 14
+                leftMargin: Appearance.barMargin
             }
         }
     }

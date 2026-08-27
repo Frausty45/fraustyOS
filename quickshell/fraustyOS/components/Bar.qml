@@ -25,7 +25,7 @@ PanelWindow {
             color: "#cdd6f4"
 
             font.pixelSize: 15
-            font.weight: Font.Medium
+            font.weight: Font.Bold
         }
 
         Clock {
@@ -33,6 +33,14 @@ PanelWindow {
                 right: parent.right
                 verticalCenter: parent.verticalCenter
                 rightMargin: 14
+            }
+        }
+
+        Workspaces {
+            anchors {
+                left: parent.left
+                verticalCenter: parent.verticalCenter
+                leftMargin: 14
             }
         }
     }

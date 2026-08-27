@@ -20,6 +20,6 @@ Item {
         color: "#cdd6f4"
 
         font.pixelSize: 15
-        font.weight: Font.Medium
+        font.weight: Font.Bold
     }
 }

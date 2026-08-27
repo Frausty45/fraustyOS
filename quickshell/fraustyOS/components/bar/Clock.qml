@@ -1,5 +1,6 @@
 import Quickshell
 import QtQuick
+import "../../config"
 
 Item {
     id: root
@@ -17,9 +18,9 @@ Item {
         anchors.centerIn: parent
 
         text: Qt.formatDateTime(clock.date, "HH:mm")
-        color: "#cdd6f4"
+        color: Appearance.foreground
 
-        font.pixelSize: 15
+        font.pixelSize: Appearance.fontSize
         font.weight: Font.Bold
     }
 }

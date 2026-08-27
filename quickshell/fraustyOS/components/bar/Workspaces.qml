@@ -20,8 +20,6 @@ Item {
             Rectangle {
                 required property int index
 
-                // Hyprland uses workspaces 1-10 internally.
-                // We display workspace 10 as "0".
                 property int workspaceId: index === 0 ? 10 : index
 
                 property bool focused:

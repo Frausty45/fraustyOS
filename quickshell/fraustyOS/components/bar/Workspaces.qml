@@ -9,7 +9,7 @@ Item {
     implicitWidth: workspaceRow.implicitWidth
     implicitHeight: workspaceRow.implicitHeight
 
-    RowLayout {
+    Row {
         id: workspaceRow
 
         anchors.centerIn: parent

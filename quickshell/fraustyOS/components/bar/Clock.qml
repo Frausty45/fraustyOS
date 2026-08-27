@@ -17,7 +17,7 @@ Item {
         id: clockText
         anchors.centerIn: parent
 
-        text: Qt.formatDateTime(clock.date, "HH:mm")
+        text: Qt.formatDateTime(clock.date, "MMM dd 🗲 HH:mm")
         color: Appearance.foreground
 
         font.pixelSize: Appearance.fontSize

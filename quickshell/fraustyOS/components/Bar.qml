@@ -1,4 +1,5 @@
 import Quickshell
+import Quickshell.Hyprland
 import QtQuick
 import "bar"
 import "../config"
@@ -15,24 +16,69 @@ PanelWindow {
     implicitHeight: Appearance.barHeight
     exclusiveZone: Appearance.barHeight
 
+    GlobalShortcut {
+        name: "appPicker"
+        description: "Toggle fraustyOS app picker"
+
+        onPressed: {
+            appPicker.visible = !appPicker.visible
+        }
+    }
+
     Rectangle {
         anchors.fill: parent
         color: Appearance.background
 
-        Text {
-            id: brand
+        Item {
+            id: brandButton
+
             anchors.centerIn: parent
 
-            text: "fraustyOS"
-            color: Appearance.foreground
+            width: brand.implicitWidth
+            height: parent.height
 
-            font.pixelSize: Appearance.fontSize
-            font.weight: Font.Bold
+            Text {
+                id: brand
+                anchors.centerIn: parent
+
+                text: "fraustyOS"
+
+                color: brandMouse.containsMouse
+                    ? Appearance.accent
+                    : Appearance.foreground
+
+                font.pixelSize: Appearance.fontSize
+                font.weight: Font.Bold
+
+                Behavior on color {
+                    ColorAnimation {
+                        duration: Appearance.animationFast
+                    }
+                }
+            }
+
+            MouseArea {
+                id: brandMouse
+
+                anchors.fill: parent
+
+                hoverEnabled: true
+                cursorShape: Qt.PointingHandCursor
+
+                onClicked: {
+                    appPicker.visible = !appPicker.visible
+                }
+            }
+        }
+
+        AppPicker {
+            id: appPicker
+            anchorItem: brandButton
         }
 
         Battery {
             anchors {
-                right: brand.left
+                right: brandButton.left
                 verticalCenter: parent.verticalCenter
                 rightMargin: 14
             }
@@ -40,7 +86,7 @@ PanelWindow {
 
         Network {
             anchors {
-                left: brand.right
+                left: brandButton.right
                 verticalCenter: parent.verticalCenter
                 leftMargin: 14
             }

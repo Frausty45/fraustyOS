@@ -47,3 +47,9 @@ hl.bind(
     hl.dsp.window.resize(),
     { mouse = true }
 )
+
+-- fraustyOS app picker
+hl.bind(
+    "SUPER + R",
+    hl.dsp.exec_cmd("qs ipc call launcher toggle")
+)

@@ -49,7 +49,6 @@ hl.bind(
 )
 
 -- fraustyOS app picker
-hl.bind(
-    "SUPER + R",
-    hl.dsp.exec_cmd("qs ipc call launcher toggle")
+hl.bind("SUPER + R",
+    hl.dsp.exec_cmd("qs -p /home/frausty/Development/fraustyOS/quickshell/fraustyOS ipc call launcher toggle")
 )

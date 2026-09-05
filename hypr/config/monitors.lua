@@ -6,10 +6,10 @@ hl.monitor({
 })
 
 hl.monitor({
-    output = "DP-1",
-    mode = "2560x1440@180",
+    output = "DP-9",
+    mode = "2560x1440@179.95",
     position = "1920x0",
-    scale = 1,
+    scale = 1.25,
 })
 
 hl.monitor({

@@ -13,6 +13,18 @@ PanelWindow {
         right: true
     }
 
+    function openPicker() {
+        appPicker.visible = true
+    }
+
+    function closePicker() {
+        appPicker.visible = false
+    }
+
+    function togglePicker() {
+        appPicker.visible = !appPicker.visible
+    }
+
     implicitHeight: Appearance.barHeight
     exclusiveZone: Appearance.barHeight
 

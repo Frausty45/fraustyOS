@@ -1,4 +1,5 @@
 import Quickshell
+import Quickshell.Io
 import QtQuick
 import QtQuick.Controls
 import "../config"
@@ -70,6 +71,55 @@ PopupWindow {
 
                     border.width: 1
                     border.color: Appearance.foreground
+                }
+
+                onTextChanged: calculatorDebounce.restart()
+            }
+
+            Rectangle {
+                id: calculatorResultBox
+
+                width: parent.width
+                height: visible ? 52: 0
+
+                visible: root.calculatorResult.length > 0
+
+                radius: 7
+
+                color: calculatorMouse.containsMouse
+                    ? Appearance.accent
+                    : "transparent"
+
+                Text {
+                    anchors {
+                        left: parent.left
+                        leftMargin: 12
+
+                        right: parent.right
+                        rightMargin: 12
+
+                        verticalCenter: parent.verticalCenter
+                    }
+
+                    text: root.calculatorResult
+
+                    color: Appearance.foreground
+
+                    font.pixelSize: 16
+                    font.weight: Font.Bold
+
+                    elide: Text.ElideRight
+                }
+
+                MouseArea {
+                    id: calculatorMouse
+
+                    anchors.fill: parent
+                    hoverEnabled: true
+
+                    onClicked: {
+                        Quickshell.clipboardText = root.calculatorResult
+                    }
                 }
             }
 
@@ -147,5 +197,132 @@ PopupWindow {
                 }
             }
         }
+    }
+
+    property string calculatorResult: ""
+    property string calculatorExpression: ""
+
+    function looksLikeCalculation(text) {
+        const query = text.trim()
+
+        if (query.length === 0)
+            return false
+
+        // explicit calc mode
+        if (query.startsWith("="))
+            return true
+
+        // dont send normal app searches to calc
+        if (!/\d/.test(query))
+            return false
+
+        // arithmetic
+        if (/[+\-*/\^%=()]/.test(query))
+            return true
+
+        // conversion / calc language
+        if (/\b(to|in|of)\b/i.test(query))
+            return true
+
+        // common functions
+        if (/\b(sqrt|sin|cos|tan|asin|acos|atan|log|ln|exp|abs\b/i.test(query))
+            return true
+
+        return false
+    }
+
+    function runCalculation() {
+        let expression = searchField.text.trim()
+
+        if (expression.startsWith("="))
+            expression = expression.substring(1).trim()
+
+        if (!looksLikeCalculation(searchField.text)) {
+            calculatorResult = ""
+            calculatorExpression = ""
+            return
+        }
+
+        calculatorExpression = expression
+
+        if (calculator.running)
+            calculator.running = false
+
+        const percentOfMatch = expression.match(
+            /^\s*(-?\d+(?:\.\d+)?)\s*%\s+of\s+(-?\d+(?:\.\d+)?)\s*$/i
+        )
+
+        if (percentOfMatch) {
+            expression =
+                "(" + percentOfMatch[1] + " / 100) * " + percentOfMatch[2]
+        }
+
+        calculator.command = [
+            "qalc",
+            "--terse",
+            "--time",
+            "1000",
+            expression
+        ]
+
+        calculator.running = true
+    }
+
+    Process {
+        id: calculator
+
+        stdout: StdioCollector {
+            onStreamFinished: {
+                const result = text.trim()
+
+                if (result.length > 0)
+                    root.calculatorResult = result
+                else
+                    root.calculatorResult = ""
+            }
+        }
+
+        stderr: StdioCollector {
+            onStreamFinished: {
+                // invalid calc input = no result
+                if (text.trim().length > 0)
+                    root.calculatorResult = ""
+            }
+        }
+    }
+
+    Process {
+        id: exchangeRateUpdater
+
+        command: [
+            "qalc",
+            "--exrates"
+        ]
+    }
+
+    Timer {
+        id: exchangeRateTimer
+
+        interval: 12 * 60 * 60 * 1000
+        repeat: true
+        running: true
+
+        onTriggered: {
+            if (!exchangeRateUpdater.running)
+                exchangeRateUpdater.running = true
+        }
+    }
+
+    Timer {
+        id: calculatorDebounce
+
+        interval: 180
+        repeat: false
+
+        onTriggered: root.runCalculation()
+    }
+
+    Component.onCompleted: {
+        exchangeRateUpdater.running = true
     }
 }

@@ -22,6 +22,13 @@ PopupWindow {
 
     color: "transparent"
 
+    onVisibleChanged: {
+        if (visible) {
+            searchField.text = ""
+            searchField.forceActiveFocus()
+        }
+    }
+
     Rectangle {
         anchors.fill: parent
 
@@ -45,6 +52,27 @@ PopupWindow {
                 font.weight: Font.Bold
             }
 
+            TextField {
+                id: searchField
+
+                width: parent.width
+
+                placeholderText: "Search..."
+                placeholderTextColor: Appearance.foreground
+
+                color: Appearance.foreground
+                font.pixelSize: 14
+                font.weight: Font.Medium
+
+                background: Rectangle {
+                    color: "transparent"
+                    radius: 7
+
+                    border.width: 1
+                    border.color: Appearance.foreground
+                }
+            }
+
             ListView {
                 id: appList
 
@@ -54,7 +82,31 @@ PopupWindow {
                 clip: true
                 spacing: 4
 
-                model: DesktopEntries.applications.values
+                model: {
+                    const query = searchField.text.trim().toLowerCase()
+
+                    return [...DesktopEntries.applications.values]
+                        .filter(app => {
+                        if (!app.name)
+                            return false
+
+                        if (query === "")
+                            return true
+
+                        const name = app.name.toLowerCase()
+                        const comment = (app.comment || "").toLowerCase()
+
+                        return name.includes(query)
+                            || comment.includes(query)
+                    })
+                        .sort((a, b) =>
+                        a.name.localeCompare(
+                            b.name,
+                            undefined,
+                            { sensitivity: "base" }
+                        )
+                    )
+                }
 
                 delegate: Rectangle {
                     required property var modelData

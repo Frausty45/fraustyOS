@@ -26,6 +26,7 @@ PopupWindow {
     onVisibleChanged: {
         if (visible) {
             searchField.text = ""
+            appList.currentIndex = 0
             searchField.forceActiveFocus()
         }
     }
@@ -73,7 +74,58 @@ PopupWindow {
                     border.color: Appearance.foreground
                 }
 
-                onTextChanged: calculatorDebounce.restart()
+                onTextChanged: {
+                    calculatorDebounce.restart()
+                    appList.currentIndex = 0
+                }
+
+                Keys.onPressed: event => {
+                    if (event.key === Qt.Key_Down) {
+                        if (appList.count > 0) {
+                            appList.currentIndex = Math.min(
+                                appList.currentIndex + 1,
+                                appList.count - 1
+                            )
+                            appList.positionViewAtIndex(
+                                appList.currentIndex,
+                                ListView.Contain
+                            )
+                        }
+
+                        event.accepted = true
+                    }
+
+                    else if (event.key === Qt.Key_Up) {
+                        if (appList.count > 0) {
+                            appList.currentIndex = Math.max(
+                                appList.currentIndex - 1,
+                                0
+                            )
+                            appList.positionViewAtIndex(
+                                appList.currentIndex,
+                                ListView.Contain
+                            )
+                        }
+
+                        event.accepted = true
+                    }
+
+                    else if (
+                        event.key === Qt.Key_Return ||
+                        event.key === Qt.Key_Enter
+                    ) {
+                        if (appList.currentIndex >= 0) {
+                            const app = appList.model[appList.currentIndex]
+
+                            if (app) {
+                                app.execute()
+                                root.visible = false
+                            }
+                        }
+
+                        event.accepted = true
+                    }
+                }
             }
 
             Rectangle {
@@ -159,13 +211,15 @@ PopupWindow {
                 }
 
                 delegate: Rectangle {
+                    id: appDelegate
+
                     required property var modelData
 
                     width: appList.width
                     height: 42
                     radius: 7
 
-                    color: mouseArea.containsMouse
+                    color: mouseArea.containsMouse || ListView.isCurrentItem
                         ? Appearance.accent
                         : "transparent"
 

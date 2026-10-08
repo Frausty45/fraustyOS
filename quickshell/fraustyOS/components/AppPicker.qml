@@ -2,24 +2,31 @@ import Quickshell
 import Quickshell.Io
 import QtQuick
 import QtQuick.Controls
+import QtQuick.Window
 import "../config"
 
-PopupWindow {
+PanelWindow {
     id: root
 
     property Item anchorItem
-    anchor.item: anchorItem
 
-    anchor {
-        edges: Edges.Bottom
-        gravity: Edges.Bottom
+    anchors {
+        top: true
+        left: true
+    }
+
+    margins {
+        top: 48
+        left: 12
     }
 
     implicitWidth: 420
     implicitHeight: 500
 
     visible: false
-    grabFocus: true
+    focusable: true
+
+    exclusionMode: ExclusionMode.Ignore
 
     color: "transparent"
 
@@ -123,6 +130,11 @@ PopupWindow {
                             }
                         }
 
+                        event.accepted = true
+                    }
+
+                    else if (event.key === Qt.Key_Escape) {
+                        root.visible = false
                         event.accepted = true
                     }
                 }

@@ -17,8 +17,13 @@ PanelWindow {
     }
 
     margins {
-        top: 48
-        left: 12
+        top: 42
+
+        left: root.anchorItem
+            ? root.anchorItem.x
+                + root.anchorItem.width / 2
+                - root.implicitWidth / 2
+            : 12
     }
 
     implicitWidth: 420

@@ -1,5 +1,6 @@
 import Quickshell
 import Quickshell.Io
+import Quickshell.Hyprland
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Window
@@ -29,6 +30,17 @@ PanelWindow {
     exclusionMode: ExclusionMode.Ignore
 
     color: "transparent"
+
+    HyprlandFocusGrab {
+        id: focusGrab
+
+        windows: [root]
+        active: root.visible
+
+        onCleared: {
+            root.visible = false
+        }
+    }
 
     onVisibleChanged: {
         if (visible) {
